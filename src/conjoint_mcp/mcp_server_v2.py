@@ -349,7 +349,6 @@ class CBCDesignMCPServer:
                 
                 # Get the generated design from the export result
                 # The export handler generates the design internally
-                from conjoint_mcp.handlers.generation import handle_generate_design
                 design_response = handle_generate_design(export_req.design_request)
                 
                 # Calculate total rows in export
@@ -430,7 +429,6 @@ class CBCDesignMCPServer:
                 result = handle_export_design(export_req)
                 
                 # Get the generated design from the export result
-                from conjoint_mcp.handlers.generation import handle_generate_design
                 design_response = handle_generate_design(export_req.design_request)
                 
                 # Calculate total rows in export
