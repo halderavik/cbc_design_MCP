@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "cbc-design-generator": {
+      "command": "python",
+      "args": ["-m", "conjoint_mcp.mcp_server_v2"],
+      "cwd": "C:\\Users\\Avik Halder\\my_dev\\CBC_design_MCP",
+      "env": {
+        "PYTHONPATH": "C:\\Users\\Avik Halder\\my_dev\\CBC_design_MCP\\src",
+        "LOG_LEVEL": "WARNING"
+      }
+    }
+  }
+}
