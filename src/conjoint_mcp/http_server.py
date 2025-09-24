@@ -6,6 +6,7 @@ HTTP server for Heroku deployment with health checks and MCP endpoints.
 import asyncio
 import json
 import logging
+import os
 import sys
 from typing import Any, Dict
 
@@ -215,13 +216,17 @@ async def list_resources():
 
 def main():
     """Main entry point for HTTP server."""
-    logger.info(f"Starting HTTP server on {settings.host}:{settings.port}")
+    # Heroku sets PORT environment variable
+    port = int(os.environ.get("PORT", settings.port))
+    host = "0.0.0.0"  # Heroku requires binding to 0.0.0.0
+    
+    logger.info(f"Starting HTTP server on {host}:{port}")
     logger.info(f"Environment: {settings.environment}")
     
     uvicorn.run(
         "conjoint_mcp.http_server:app",
-        host=settings.host,
-        port=settings.port,
+        host=host,
+        port=port,
         log_level=settings.log_level.lower(),
         access_log=True
     )
