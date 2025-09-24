@@ -148,11 +148,13 @@ Notes: Balanced overlap and orthogonal array have placeholder implementations th
 - **RM.5** Performance optimization under cloud limits
 
 #### Discovered During Work
-- **2025-01-23**: Implemented Johnson-Orme rule for CBC sample size calculation
+- **2025-01-23**: Implemented Johnson-Orme rule with default 300 respondents for commercial studies
   - Replaced all previous methods with academically validated Johnson-Orme rule
   - Formula: n ≥ 500c / (t × a) for main effects
   - Support for interaction analysis with largest product of attribute levels
   - Includes 15% quality buffer for dropouts and quality loss
-  - Laptop design now suggests 49 respondents (main effects) vs previous 68
+  - Default behavior: 300 respondents for commercial studies (vs base calculation of 49)
+  - Added segment-aware sample size recommendations (200+ per segment)
+  - Provides guidance for segment analysis in MCP server responses
   - Matches academic literature examples and industry best practices
   - Added comprehensive recommendations function with multiple scenarios

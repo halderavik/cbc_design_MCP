@@ -1,0 +1,68 @@
+{
+  "name": "CBC Design Generator MCP Server",
+  "description": "Choice Based Conjoint design generation with MCP protocol support",
+  "repository": "https://github.com/halderavik/cbc_design_MCP.git",
+  "logo": "https://raw.githubusercontent.com/halderavik/cbc_design_MCP/main/docs/logo.png",
+  "keywords": [
+    "conjoint-analysis",
+    "choice-based-conjoint",
+    "market-research",
+    "mcp",
+    "model-context-protocol",
+    "python",
+    "fastapi"
+  ],
+  "success_url": "/health",
+  "env": {
+    "APP_ENVIRONMENT": {
+      "description": "Application environment (dev/prod/test)",
+      "value": "prod"
+    },
+    "APP_LOG_LEVEL": {
+      "description": "Logging level (DEBUG/INFO/WARNING/ERROR)",
+      "value": "INFO"
+    },
+    "MCP_LOG_LEVEL": {
+      "description": "MCP server logging level",
+      "value": "WARNING"
+    },
+    "MAX_RESPONDENTS": {
+      "description": "Maximum number of respondents allowed",
+      "value": "2000"
+    },
+    "MAX_TASKS_PER_RESPONDENT": {
+      "description": "Maximum tasks per respondent",
+      "value": "20"
+    },
+    "MAX_OPTIONS_PER_TASK": {
+      "description": "Maximum options per task",
+      "value": "5"
+    },
+    "HEALTH_CHECK_ENABLED": {
+      "description": "Enable health check endpoints",
+      "value": "true"
+    },
+    "HEALTH_CHECK_TIMEOUT": {
+      "description": "Health check timeout in seconds",
+      "value": "30"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql:mini",
+      "as": "DATABASE"
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "stack": "heroku-22"
+}
