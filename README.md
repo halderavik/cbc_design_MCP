@@ -172,23 +172,22 @@ pytest --cov=src/conjoint_mcp
 
 ## 🧠 Intelligent Sample Size Calculation
 
-The MCP server automatically suggests optimal sample sizes based on:
+The MCP server automatically suggests optimal sample sizes based on CBC design best practices:
 
-### **Adaptive Algorithm**
-- **Simple designs** (≤3 parameters): 5 observations per parameter
-- **Medium designs** (4-6 parameters): 7 observations per parameter  
-- **Complex designs** (7-10 parameters): 8 observations per parameter
-- **Very complex designs** (>10 parameters): 10 observations per parameter
+### **Standard CBC Rule**
+- **Formula**: 5-10 observations per parameter (including intercept)
+- **Optimal**: 7.5 observations per parameter
+- **Parameters**: Total levels - Number of attributes + 1 (for intercept)
 
-### **Power Analysis Integration**
-- Uses statistical power analysis (80% power, α=0.05)
-- Balances statistical rigor with practical constraints
-- For complex designs, uses weighted approach to avoid extremes
+### **Example Calculations**
+- **Laptop design** (4 attributes × 3 levels = 9 parameters): 68 respondents
+- **Medium design** (3 attributes × 3 levels = 7 parameters): 53 respondents
+- **Simple design** (2 attributes × 2 levels = 3 parameters): 23 respondents
 
-### **Example Results**
-- **Laptop design** (8 parameters): 30 respondents (vs. 80 with old algorithm)
-- **Simple design** (2 parameters): 20 respondents
-- **Medium design** (6 parameters): 30-42 respondents
+### **Why This Works**
+- Follows established CBC methodology from academic literature
+- Ensures adequate statistical power for parameter estimation
+- Balances data collection costs with analysis reliability
 
 ### **Override When Needed**
 You can always specify a custom number of respondents:

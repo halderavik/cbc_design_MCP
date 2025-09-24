@@ -146,3 +146,10 @@ Notes: Balanced overlap and orthogonal array have placeholder implementations th
 - **RM.3** MCP protocol compliance verification
 - **RM.4** Heroku deployment constraints handling
 - **RM.5** Performance optimization under cloud limits
+
+#### Discovered During Work
+- **2025-01-23**: Improved optimal sample size calculation algorithm
+  - Replaced conservative "10 observations per parameter" rule with adaptive algorithm
+  - Reduced laptop design from 80 to 30 respondents (62.5% reduction)
+  - Maintains statistical validity while improving practicality
+  - Uses weighted approach for complex designs to avoid extremes
