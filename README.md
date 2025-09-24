@@ -186,14 +186,21 @@ Where:
 - **c** = largest number of levels for any attribute (main effects)
 - **c** = largest product of levels for any attribute pair (interactions)
 
+### **Default Behavior**
+- **Commercial studies**: 300 respondents (default)
+- **Base calculation**: Uses Johnson-Orme rule (e.g., 49 for laptop design)
+- **Segment analysis**: Automatically suggests 200+ per segment
+
 ### **Example Calculations**
-- **Laptop design** (4 attributes × 3 levels, 12 tasks, 3 alts): 49 respondents (main effects)
+- **Laptop design** (4 attributes × 3 levels, 12 tasks, 3 alts): 300 respondents (default commercial)
+- **Base Johnson-Orme**: 49 respondents (main effects)
 - **With interactions**: 144 respondents
-- **Conservative (1000×)**: 97 respondents (main effects)
+- **2 segments**: 400 respondents (200 per segment)
+- **3 segments**: 600 respondents (200 per segment)
 
 ### **Pragmatic Targets**
 - **Minimum credible**: 250 respondents
-- **Typical commercial**: 300 respondents  
+- **Typical commercial**: 300 respondents (default)
 - **Subgroup analysis**: 400+ respondents
 - **High precision**: Use 1000× multiplier
 

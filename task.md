@@ -148,9 +148,11 @@ Notes: Balanced overlap and orthogonal array have placeholder implementations th
 - **RM.5** Performance optimization under cloud limits
 
 #### Discovered During Work
-- **2025-01-23**: Fixed optimal sample size calculation algorithm
-  - Replaced inappropriate power analysis with standard CBC methodology
-  - Uses proper rule: 5-10 observations per parameter (including intercept)
-  - Optimal: 7.5 observations per parameter
-  - Laptop design now correctly suggests 68 respondents (was incorrectly 10)
-  - Follows established academic literature for CBC designs
+- **2025-01-23**: Implemented Johnson-Orme rule for CBC sample size calculation
+  - Replaced all previous methods with academically validated Johnson-Orme rule
+  - Formula: n ≥ 500c / (t × a) for main effects
+  - Support for interaction analysis with largest product of attribute levels
+  - Includes 15% quality buffer for dropouts and quality loss
+  - Laptop design now suggests 49 respondents (main effects) vs previous 68
+  - Matches academic literature examples and industry best practices
+  - Added comprehensive recommendations function with multiple scenarios

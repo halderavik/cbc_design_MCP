@@ -33,10 +33,10 @@ def handle_generate_design(req: GenerateDesignRequest) -> GenerateDesignResponse
     # Determine number of respondents
     if req.num_respondents is None:
         suggested_respondents = suggest_optimal_respondents(
-            req.grid, req.num_screens, req.options_per_screen
+            req.grid, req.num_screens, req.options_per_screen, default_commercial=True
         )
         num_respondents = suggested_respondents
-        notes = f"Suggested {suggested_respondents} respondents based on statistical power analysis."
+        notes = f"Using {suggested_respondents} respondents (default commercial target). For segment analysis, consider specifying segments or custom sample size."
     else:
         num_respondents = req.num_respondents
         suggested_respondents = None

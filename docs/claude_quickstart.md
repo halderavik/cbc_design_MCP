@@ -23,7 +23,8 @@ Return the design summary.
 ```
 
 Notes:
-- If `num_respondents` is omitted, the server will suggest an optimal sample size and include it in the summary.
+- If `num_respondents` is omitted, the server defaults to 300 respondents (commercial standard).
+- For segment analysis, specify custom sample size or segments for precise calculations.
 
 ## 3) Optimize Study Parameters
 - Prompt:

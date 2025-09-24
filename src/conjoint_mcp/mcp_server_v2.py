@@ -304,6 +304,14 @@ class CBCDesignMCPServer:
                 if result.notes:
                     response_text += f"📝 Notes: {result.notes}\n\n"
                 
+                # Add segment analysis guidance
+                if result.num_respondents >= 300:
+                    response_text += f"🎯 Segment Analysis Guidance:\n"
+                    response_text += f"- Current sample size ({result.num_respondents}) is suitable for segment analysis\n"
+                    response_text += f"- For 2-3 segments: aim for 200+ respondents per segment\n"
+                    response_text += f"- For 4+ segments: consider increasing total sample size\n"
+                    response_text += f"- Specify custom sample size if you have specific segment requirements\n\n"
+                
                 response_text += f"📋 Sample Tasks (showing first 3):\n"
                 for i, task in enumerate(result.tasks[:3]):
                     response_text += f"Task {task.task_index}:\n"

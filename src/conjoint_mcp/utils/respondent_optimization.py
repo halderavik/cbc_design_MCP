@@ -14,7 +14,8 @@ def suggest_optimal_respondents(
     effect_size: float = 0.2,
     alpha: float = 0.05,
     include_interactions: bool = False,
-    quality_buffer: float = 0.15
+    quality_buffer: float = 0.15,
+    default_commercial: bool = True
 ) -> int:
     """
     Suggest optimal number of respondents using the Johnson-Orme rule-of-thumb for CBC designs.
@@ -38,6 +39,7 @@ def suggest_optimal_respondents(
         alpha: Significance level (default 0.05)
         include_interactions: Whether to plan for two-way interactions (default False)
         quality_buffer: Buffer for quality loss/dropouts (default 0.15 = 15%)
+        default_commercial: If True, defaults to 300 respondents for commercial studies (default True)
     
     Returns:
         int: Suggested number of respondents
@@ -78,7 +80,12 @@ def suggest_optimal_respondents(
     if c <= 2 and t * a >= 10:
         min_respondents = 20
     
-    suggested_respondents = max(min_respondents, min(buffered_respondents, max_respondents))
+    # Default to commercial standard if requested
+    if default_commercial:
+        # Use 300 as the default commercial target, but ensure it meets minimum requirements
+        suggested_respondents = max(buffered_respondents, 300)
+    else:
+        suggested_respondents = max(min_respondents, min(buffered_respondents, max_respondents))
     
     return suggested_respondents
 
@@ -162,6 +169,86 @@ def get_sample_size_recommendations(
             "subgroups_200_each": max(400, main_500_buffered * 2)
         }
     }
+
+
+def get_segment_aware_recommendations(
+    grid: DesignGrid,
+    num_screens: int,
+    options_per_screen: int,
+    segments: list = None,
+    min_per_segment: int = 200
+) -> dict:
+    """
+    Get sample size recommendations considering segment analysis requirements.
+    
+    Args:
+        grid: Design grid with attributes and levels
+        num_screens: Number of choice tasks per respondent
+        options_per_screen: Number of options per choice task
+        segments: List of segment names (e.g., ["Young", "Middle-aged", "Senior"])
+        min_per_segment: Minimum respondents per segment (default 200)
+    
+    Returns:
+        dict: Segment-aware sample size recommendations
+    """
+    # Get base recommendations
+    base_recommendations = get_sample_size_recommendations(grid, num_screens, options_per_screen)
+    
+    # Calculate segment requirements
+    if segments:
+        num_segments = len(segments)
+        total_for_segments = num_segments * min_per_segment
+        
+        # Ensure we meet both base requirements and segment requirements
+        recommended_total = max(
+            base_recommendations["recommendations"]["main_effects_only"],
+            total_for_segments
+        )
+        
+        segment_analysis = {
+            "segments": segments,
+            "num_segments": num_segments,
+            "min_per_segment": min_per_segment,
+            "total_for_segments": total_for_segments,
+            "recommended_total": recommended_total,
+            "per_segment": recommended_total // num_segments if num_segments > 0 else 0
+        }
+    else:
+        # No segments specified - use base recommendation
+        recommended_total = base_recommendations["recommendations"]["main_effects_only"]
+        segment_analysis = {
+            "segments": None,
+            "num_segments": 0,
+            "min_per_segment": min_per_segment,
+            "total_for_segments": 0,
+            "recommended_total": recommended_total,
+            "per_segment": 0
+        }
+    
+    return {
+        "base_recommendations": base_recommendations,
+        "segment_analysis": segment_analysis,
+        "final_recommendation": {
+            "total_respondents": recommended_total,
+            "reasoning": _get_recommendation_reasoning(base_recommendations, segment_analysis)
+        }
+    }
+
+
+def _get_recommendation_reasoning(base_recs: dict, segment_analysis: dict) -> str:
+    """Generate human-readable reasoning for the recommendation."""
+    base_main = base_recs["recommendations"]["main_effects_only"]
+    total_recommended = segment_analysis["recommended_total"]
+    
+    if segment_analysis["num_segments"] == 0:
+        return f"Using base Johnson-Orme calculation: {base_main} respondents for main effects analysis."
+    
+    total_for_segments = segment_analysis["total_for_segments"]
+    
+    if total_recommended == base_main:
+        return f"Base calculation ({base_main}) meets segment requirements ({total_for_segments})."
+    else:
+        return f"Segment analysis requires {total_for_segments} respondents ({segment_analysis['num_segments']} segments × {segment_analysis['min_per_segment']} each), which exceeds base calculation ({base_main})."
 
 
 def calculate_expected_power(
