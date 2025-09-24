@@ -170,24 +170,38 @@ pytest tests/unit/test_performance.py
 pytest --cov=src/conjoint_mcp
 ```
 
-## 🧠 Intelligent Sample Size Calculation
+## 🧠 Johnson-Orme Sample Size Calculation
 
-The MCP server automatically suggests optimal sample sizes based on CBC design best practices:
+The MCP server uses the academically validated Johnson-Orme rule-of-thumb for CBC sample size calculation:
 
-### **Standard CBC Rule**
-- **Formula**: 5-10 observations per parameter (including intercept)
-- **Optimal**: 7.5 observations per parameter
-- **Parameters**: Total levels - Number of attributes + 1 (for intercept)
+### **Johnson-Orme Formula**
+- **Main Effects**: n ≥ 500c / (t × a)
+- **With Interactions**: n ≥ 500c / (t × a) where c = largest product of attribute levels
+- **Quality Buffer**: +15% for dropouts and quality loss
+
+Where:
+- **n** = respondents
+- **t** = choice tasks per respondent
+- **a** = alternatives per task
+- **c** = largest number of levels for any attribute (main effects)
+- **c** = largest product of levels for any attribute pair (interactions)
 
 ### **Example Calculations**
-- **Laptop design** (4 attributes × 3 levels = 9 parameters): 68 respondents
-- **Medium design** (3 attributes × 3 levels = 7 parameters): 53 respondents
-- **Simple design** (2 attributes × 2 levels = 3 parameters): 23 respondents
+- **Laptop design** (4 attributes × 3 levels, 12 tasks, 3 alts): 49 respondents (main effects)
+- **With interactions**: 144 respondents
+- **Conservative (1000×)**: 97 respondents (main effects)
+
+### **Pragmatic Targets**
+- **Minimum credible**: 250 respondents
+- **Typical commercial**: 300 respondents  
+- **Subgroup analysis**: 400+ respondents
+- **High precision**: Use 1000× multiplier
 
 ### **Why This Works**
-- Follows established CBC methodology from academic literature
-- Ensures adequate statistical power for parameter estimation
-- Balances data collection costs with analysis reliability
+- Based on peer-reviewed academic literature
+- Validated across thousands of CBC studies
+- Accounts for design efficiency and statistical power
+- Includes practical considerations for real-world studies
 
 ### **Override When Needed**
 You can always specify a custom number of respondents:
