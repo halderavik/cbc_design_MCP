@@ -16,6 +16,7 @@ def suggest_optimal_respondents(
 ) -> int:
     """
     Suggest optimal number of respondents based on statistical power calculations.
+    Uses a more intelligent approach that balances statistical rigor with practicality.
     
     Args:
         grid: Design grid with attributes and levels
@@ -35,29 +36,49 @@ def suggest_optimal_respondents(
     # Calculate total observations per respondent
     observations_per_respondent = num_screens * options_per_screen
     
-    # Use Cohen's power analysis for logistic regression
-    # This is a simplified calculation - in practice, you'd use more sophisticated methods
-    
-    # Minimum sample size based on rule of thumb: 10-15 observations per parameter
-    min_respondents_by_parameters = math.ceil(num_parameters * 10)
-    
-    # Minimum sample size based on power analysis (simplified)
-    # For binary choice, we need sufficient observations to detect effects
+    # More intelligent power analysis approach
     z_alpha = 1.96  # For alpha = 0.05
     z_beta = 0.84   # For power = 0.8
     
-    # Simplified power calculation
+    # Calculate required sample size for target power
     effect_size_squared = effect_size ** 2
-    min_respondents_by_power = math.ceil(
+    required_respondents_by_power = math.ceil(
         ((z_alpha + z_beta) ** 2) / (effect_size_squared * observations_per_respondent)
     )
     
-    # Take the maximum of both calculations
-    suggested_respondents = max(min_respondents_by_parameters, min_respondents_by_power)
+    # Adaptive parameter-based calculation
+    # Use fewer observations per parameter for simpler designs, more for complex ones
+    if num_parameters <= 3:
+        obs_per_param = 5  # Simple designs need fewer observations
+    elif num_parameters <= 6:
+        obs_per_param = 7  # Medium complexity
+    elif num_parameters <= 10:
+        obs_per_param = 8  # Complex designs
+    else:
+        obs_per_param = 10  # Very complex designs
     
-    # Apply some practical constraints
+    min_respondents_by_parameters = math.ceil(num_parameters * obs_per_param)
+    
+    # Use the more appropriate calculation based on design complexity
+    if num_parameters <= 5:
+        # For simple designs, prioritize power analysis
+        suggested_respondents = max(required_respondents_by_power, min_respondents_by_parameters)
+    else:
+        # For complex designs, use a weighted average to avoid extreme values
+        power_weight = 0.6
+        param_weight = 0.4
+        suggested_respondents = math.ceil(
+            power_weight * required_respondents_by_power + 
+            param_weight * min_respondents_by_parameters
+        )
+    
+    # Apply practical constraints with more reasonable bounds
     min_respondents = 30  # Minimum for any meaningful analysis
-    max_respondents = 2000  # Practical upper limit
+    max_respondents = 500  # More reasonable upper limit for most studies
+    
+    # For very simple designs, allow smaller minimums
+    if num_parameters <= 2 and observations_per_respondent >= 10:
+        min_respondents = 20
     
     suggested_respondents = max(min_respondents, min(suggested_respondents, max_respondents))
     

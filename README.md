@@ -114,6 +114,12 @@ python -m conjoint_mcp.mcp_server_v2
 "Export the design to CSV and save it as 'smartphone_survey_design'"
 ```
 
+### Generate with Optimal Sample Size (Default)
+```
+"Generate a CBC design with laptop attributes: processor, storage, display, and price"
+```
+*The system automatically suggests the optimal number of respondents based on statistical power analysis*
+
 ### Generate with Specific Respondents
 ```
 "Generate a CBC design for 100 respondents with laptop attributes: processor, storage, display, and price"
@@ -162,6 +168,32 @@ pytest tests/unit/test_performance.py
 ### Test Coverage
 ```bash
 pytest --cov=src/conjoint_mcp
+```
+
+## 🧠 Intelligent Sample Size Calculation
+
+The MCP server automatically suggests optimal sample sizes based on:
+
+### **Adaptive Algorithm**
+- **Simple designs** (≤3 parameters): 5 observations per parameter
+- **Medium designs** (4-6 parameters): 7 observations per parameter  
+- **Complex designs** (7-10 parameters): 8 observations per parameter
+- **Very complex designs** (>10 parameters): 10 observations per parameter
+
+### **Power Analysis Integration**
+- Uses statistical power analysis (80% power, α=0.05)
+- Balances statistical rigor with practical constraints
+- For complex designs, uses weighted approach to avoid extremes
+
+### **Example Results**
+- **Laptop design** (8 parameters): 30 respondents (vs. 80 with old algorithm)
+- **Simple design** (2 parameters): 20 respondents
+- **Medium design** (6 parameters): 30-42 respondents
+
+### **Override When Needed**
+You can always specify a custom number of respondents:
+```
+"Generate a CBC design for 100 respondents with [your attributes]"
 ```
 
 ## 🔧 Development
