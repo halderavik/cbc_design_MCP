@@ -38,7 +38,7 @@ Expected response: The system should confirm the MCP is connected and working.
 
 ### Example 1: Simple Smartphone Design
 
-**Prompt:**
+**Prompt for ChatGPT:**
 ```
 "Generate a CBC design for a smartphone with these attributes:
 - Brand: Apple, Samsung, Google
@@ -47,6 +47,27 @@ Expected response: The system should confirm the MCP is connected and working.
 - Camera: 12MP, 48MP, 108MP
 
 Use the random algorithm and generate for 50 respondents."
+```
+
+**Expected ChatGPT Response:**
+ChatGPT will automatically format this into the correct structure:
+```json
+{
+  "spec": {
+    "method": "random",
+    "grid": {
+      "attributes": [
+        {"name": "Brand", "levels": [{"name": "Apple"}, {"name": "Samsung"}, {"name": "Google"}]},
+        {"name": "Storage", "levels": [{"name": "64GB"}, {"name": "128GB"}, {"name": "256GB"}]},
+        {"name": "Price", "levels": [{"name": "$299"}, {"name": "$499"}, {"name": "$699"}]},
+        {"name": "Camera", "levels": [{"name": "12MP"}, {"name": "48MP"}, {"name": "108MP"}]}
+      ]
+    },
+    "options_per_screen": 3,
+    "num_screens": 10,
+    "num_respondents": 50
+  }
+}
 ```
 
 **What this does:**
@@ -294,25 +315,36 @@ Create for 350 respondents using balanced overlap to optimize service offerings.
 
 ### Common Issues and Solutions
 
-#### Issue 1: "Design generation failed"
+#### Issue 1: "Required fields missing: method and grid" (ChatGPT)
+**Problem:** ChatGPT MCP wrapper expects specific payload structure
+**Solution:**
+```
+"Generate a CBC design for [product] with [attributes] using [algorithm] for [X] respondents"
+```
+ChatGPT will automatically format this correctly. If it fails, try:
+```
+"Use generate_design with spec: {method: 'random', grid: {attributes: [list your attributes here]}, num_respondents: 50}"
+```
+
+#### Issue 2: "Design generation failed"
 **Solution:**
 ```
 "Try generating the design again with fewer attributes or levels, or use the random algorithm for faster generation."
 ```
 
-#### Issue 2: "Sample size too small"
+#### Issue 3: "Sample size too small"
 **Solution:**
 ```
 "Optimize the parameters first to get the recommended sample size, then generate the design."
 ```
 
-#### Issue 3: "Export failed"
+#### Issue 4: "Export failed"
 **Solution:**
 ```
 "Make sure you've generated a design first, then try exporting again."
 ```
 
-#### Issue 4: "Constraints not working"
+#### Issue 5: "Constraints not working"
 **Solution:**
 ```
 "Check that your constraints are realistic and don't conflict with each other."
