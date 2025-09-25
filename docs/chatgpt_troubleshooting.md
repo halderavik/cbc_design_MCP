@@ -12,11 +12,13 @@ The CBC service rejected the request because two required fields are missing in 
 - grid → usually defines the attributes and levels grid
 ```
 
+**UPDATE: This issue has been FIXED!** The ChatGPT MCP wrapper now automatically handles format conversion.
+
 ### Root Cause
 The ChatGPT MCP wrapper expects a specific payload structure that's different from natural language prompts.
 
-### Solution 1: Use Natural Language (Recommended)
-**Just use natural language - ChatGPT will format it correctly:**
+### Solution 1: Use Natural Language (Now Working!)
+**Just use natural language - the wrapper now handles format conversion automatically:**
 
 ```
 "Generate a CBC design for a smartphone with:
@@ -27,6 +29,8 @@ The ChatGPT MCP wrapper expects a specific payload structure that's different fr
 
 Use the random algorithm for 50 respondents"
 ```
+
+**This should now work without any format issues!**
 
 ### Solution 2: Explicit JSON Structure
 If natural language fails, use explicit JSON:
