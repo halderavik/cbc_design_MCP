@@ -2,6 +2,17 @@
 
 This guide helps you resolve common issues when using the CBC Design MCP with ChatGPT.
 
+## Common Error: "ResourceNotFound for generate_design endpoint"
+
+### Problem
+You get an error like:
+```
+I corrected the payload with method and grid, but the CBC service still reports ResourceNotFound for the generate_design endpoint.
+This suggests that while the endpoint is listed in the catalog, it may not actually be exposed or available in the current deployment.
+```
+
+**UPDATE: This issue has been FIXED!** The ChatGPT MCP wrapper now uses the correct protocol version and proper tool routing.
+
 ## Common Error: "Required fields missing: method and grid"
 
 ### Problem
@@ -14,7 +25,12 @@ The CBC service rejected the request because two required fields are missing in 
 
 **UPDATE: This issue has been FIXED!** The ChatGPT MCP wrapper now automatically handles format conversion.
 
-### Root Cause
+### Root Cause (ResourceNotFound)
+The issue was caused by:
+1. **Protocol Version Mismatch**: ChatGPT expected MCP protocol version `2025-06-18` but the wrapper was using `2024-11-05`
+2. **Tool Routing Issues**: The custom JSON-RPC handler wasn't properly routing to the FastMCP tools
+
+### Root Cause (Method and Grid)
 The ChatGPT MCP wrapper expects a specific payload structure that's different from natural language prompts.
 
 ### Solution 1: Use Natural Language (Now Working!)
